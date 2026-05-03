@@ -28,7 +28,8 @@ exports.createBill = async (req, res) => {
             totalAmount: parseFloat(totalAmount),
             billingDate: billingDate || Date.now(),
             paymentStatus: 'Paid', // Automatically mark as Paid during creation
-            invoiceUrl: `/uploads/billing/${req.file.filename}`
+            
+            invoiceUrl: `https://the-golden-platter-restaurant-mobile-app.onrender.com/uploads/billing/${req.file.filename}`
         });
 
         await newBill.save();
