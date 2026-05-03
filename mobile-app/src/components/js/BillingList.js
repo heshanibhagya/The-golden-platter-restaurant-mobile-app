@@ -14,9 +14,6 @@ import styles from '../css/BillingListStyles';
  * This is the main component used to display the billing history.
  * It fetches bills from the backend and displays 'Paid' records in a list.
  * Users can view invoices and delete records.
- * 
- * Why it's used:
- * It is essential for administration to check payment history and view invoices.
  */
 
 const BillingList = () => {
@@ -58,8 +55,11 @@ const BillingList = () => {
             return;
         }
         
-        // Combine backend URL with the file path
-        const fullUrl = `${SERVER_URL}${url}`;
+        /**
+         * FIX: We no longer combine SERVER_URL with url here 
+         * because the backend now provides the full hosted URL.
+         */
+        const fullUrl = url; 
         console.log("Opening Invoice URL:", fullUrl);
         
         // Open in browser or default PDF viewer
@@ -135,7 +135,6 @@ const BillingList = () => {
         <View style={styles.container}>
             <View style={styles.header}>
                 <Text style={styles.title}>Billing History</Text>
-                {/* Add button directs to Pending Orders to create a new bill */}
                 <TouchableOpacity onPress={() => router.push('/(tabs)/pending-orders')} style={styles.addButton}>
                     <Ionicons name="add" size={28} color="#000" />
                 </TouchableOpacity>
