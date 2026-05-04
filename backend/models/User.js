@@ -27,8 +27,8 @@ const userSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-// models/User.js ඇතුළේ ඇති මේ කොටස පමණක් වෙනස් කරන්න
-userSchema.pre('save', async function() { // මෙතන 'next' අයින් කළා
+// models/User.js 
+userSchema.pre('save', async function() { 
     if (!this.isModified('password')) {
         return;
     }
@@ -37,7 +37,7 @@ userSchema.pre('save', async function() { // මෙතන 'next' අයින්
         const salt = await bcrypt.genSalt(10);
         this.password = await bcrypt.hash(this.password, salt);
     } catch (error) {
-        throw error; // මෙතනත් next(error) වෙනුවට throw කරන්න
+        throw error; 
     }
 });
 

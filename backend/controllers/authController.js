@@ -2,23 +2,23 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-// --- User කෙනෙක් register (create) කරන function එක ---
+// --- User kenek register (create) karana function eka ---
 exports.registerUser = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
 
-    // 1. Validation - අත්‍යවශ්‍ය දත්ත තිබේදැයි බැලීම
+    // 1. Validation 
     if (!name || !email || !password) {
       return res.status(400).json({ message: 'Please provide all required fields (Name, Email, Password)' });
     }
 
-    // 2. Email එක කලින් පාවිච්චි කර ඇත්දැයි බැලීම
+    // 2. Email eka kalin use karalada balanwa 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: 'This email is already registered. Please login or use a different email.' });
     }
 
-    // 3. අලුත් User කෙනෙක් සෑදීම
+    // 3. new User kenek hadanwa 
     const user = new User({
       name,
       email,
@@ -26,17 +26,17 @@ exports.registerUser = async (req, res) => {
       role: role || 'staff' // Default role eka staff widiyata gannawa
     });
 
-    // 4. Database එකට Save කිරීම
+    // 4. Database ekata Save karanwa 
     await user.save();
 
-    // 5. JWT Token එකක් සෑදීම
+    // 5. JWT Token ekak hadanwa 
     const token = jwt.sign(
       { id: user._id, role: user.role }, 
       process.env.JWT_SECRET || 'your_secret_key', 
       { expiresIn: '1d' }
     );
 
-    // 6. සාර්ථක ප්‍රතිචාරය
+    // 6. right answer 
     res.status(201).json({
       message: 'User registered successfully!', 
       user: {
@@ -62,36 +62,36 @@ exports.registerUser = async (req, res) => {
 };
 
 
-// --- User Login කරන function එක ---
+// --- User Login karana  function eka  ---
 exports.loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        // 1. Email එක සහ Password එක එවලා තියෙනවාද බලනවා
+        // 1. Email eka saha  Password eka ewala thiyenwada balanwa 
         if (!email || !password) {
             return res.status(400).json({ message: "Please provide email and password" });
         }
 
-        // 2. Email එකෙන් User කෙනෙක් ඉන්නවද කියලා බලනවා
+        // 2. Email eken  User kenek innwada balanwa 
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(400).json({ message: "Invalid email or password" });
         }
 
-        // 3. Password එක සසඳා බැලීම (bcrypt.compare)
+        // 3. Password eka sasadala balanawa  (bcrypt.compare)
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ message: "Invalid email or password" });
         }
 
-        // 4. JWT Token එකක් සෑදීම
+        // 4. JWT Token ekak hadanwa 
         const token = jwt.sign(
             { id: user._id, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: '1d' }
         );
 
-        // 5. සාර්ථක ප්‍රතිචාරය ලබා දීම
+        // 5. right answers gannwa 
         res.status(200).json({
             message: "Login successful",
             token,

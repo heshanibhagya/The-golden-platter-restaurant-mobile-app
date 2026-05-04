@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
-// Controller එකෙන් අවශ්‍ය function දෙකම එකවර import කරගන්නවා
+// Controler eken oni function dekama ekawara import karanwa 
 const { registerUser, loginUser } = require('../controllers/authController');
 
 // --- Register Route ---
-// POST request එකක් /register endpoint එකට ආවම ඒක handle කරනවා
+// POST request ekak /register endpoint ekata awama handle karanwa 
 router.post('/register', registerUser);
 
 // --- Login Route ---
-// POST request එකක් /login endpoint එකට ආවම ඒක handle කරනවා
+// POST request ekak /login endpoint ekata awama eka  handle karanwa 
 router.post('/login', loginUser);
 
 module.exports = router;
